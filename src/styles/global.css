@@ -1,11 +1,14 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: "Geist Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-sans: "Geist Sans", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -130,5 +133,93 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Glitch animation */
+@keyframes glitch {
+  0%,
+  100% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 1px);
+  }
+  40% {
+    transform: translate(2px, -1px);
+  }
+  60% {
+    transform: translate(-1px, 1px);
+  }
+  80% {
+    transform: translate(1px, -1px);
+  }
+}
+
+/* Monochrome prose with glitch accent */
+.prose.prose-terminal {
+  /* Headings */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-mono text-neutral-200;
+  }
+
+  /* Links */
+  a {
+    @apply text-neutral-400 no-underline transition-all duration-150;
+    border-bottom: 1px solid theme(colors.neutral.700);
+
+    &:hover {
+      @apply text-neutral-100;
+      border-color: transparent;
+      animation: glitch 0.3s ease;
+      text-shadow: -2px 0 theme(colors.cyan.400),
+        2px 0 theme(colors.fuchsia.400);
+    }
+  }
+
+  /* Strong */
+  strong {
+    @apply text-neutral-100 font-semibold;
+  }
+
+  /* Inline code */
+  code:not(pre code) {
+    @apply text-neutral-300 bg-neutral-800/50 px-1.5 py-0.5 rounded-none border border-neutral-700/50;
+    &::before,
+    &::after {
+      content: none;
+    }
+  }
+
+  /* Code blocks with terminal window chrome */
+  pre {
+    @apply relative pt-10 bg-neutral-950 border border-neutral-800 rounded-none overflow-hidden;
+
+    &::before {
+      content: "terminal";
+      @apply absolute top-0 inset-x-0 h-7 flex items-center px-3 bg-neutral-900 border-b border-neutral-800 text-[10px] text-neutral-500 font-mono select-none;
+    }
+
+    &::after {
+      content: "";
+      @apply absolute top-2.5 right-3 size-2 bg-neutral-600 rounded-full;
+      box-shadow: -10px 0 0 #525252, -20px 0 0 #525252;
+    }
+  }
+
+  /* Blockquotes */
+  blockquote {
+    @apply not-italic border-l-2 border-neutral-600 bg-neutral-800/20 px-4 py-1 text-neutral-400;
+  }
+
+  /* List markers */
+  ul > li::marker {
+    content: "> ";
+    @apply text-neutral-500;
   }
 }

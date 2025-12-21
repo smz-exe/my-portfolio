@@ -1,0 +1,77 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import FormattedDate from "@/components/blog/FormattedDate.astro";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: post,
+  }));
+}
+
+const post = Astro.props as CollectionEntry<"blog">;
+const { Content } = await post.render();
+---
+
+<Layout title={post.data.title} description={post.data.description}>
+  <article class="min-h-screen pb-20">
+    <header class="border border-neutral-800 bg-neutral-900/30">
+      <div class="container mx-auto px-4 py-12 md:py-20 max-w-4xl">
+        <a
+          href="/blog"
+          class="group inline-flex items-center gap-2 text-sm font-mono text-neutral-500 hover:text-accent mb-8 transition-colors"
+          aria-label="Back to blog"
+        >
+          <span class="group-hover:-translate-x-1 transition-transform"
+            >&lt;</span
+          >
+          cd ..
+        </a>
+        <div
+          class="flex flex-wrap gap-4 text-xs font-mono uppercase tracking-wider text-neutral-500 mb-4"
+        >
+          <div class="flex items-center gap-2">
+            <span class="text-fuchsia-500">##</span>
+            <FormattedDate date={post.data.publishedAt} />
+          </div>
+          {
+            post.data.updatedAt && (
+              <div class="flex items-center gap-2">
+                <span class="text-yellow-500">::</span>
+                Updated <FormattedDate date={post.data.updatedAt} />
+              </div>
+            )
+          }
+          <div class="flex items-center gap-2">
+            <span class="text-cyan-500">[]</span>
+            {post.data.tags.join(", ")}
+          </div>
+        </div>
+        <h1
+          class="text-3xl md:text-5xl font-bold font-sans text-neutral-100 tracking-tight leading-tight mb-6"
+        >
+          {post.data.title}
+        </h1>
+        {
+          post.data.description && (
+            <p class="text-lg md:text-xl text-neutral-400 leading-relaxed max-w-2xl font-sans">
+              {post.data.description}
+            </p>
+          )
+        }
+      </div>
+      <div
+        class="h-2 w-full bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,#262626_10px,#262626_20px)] border-y border-neutral-800 opacity-50"
+      >
+      </div>
+    </header>
+    <div class="container mx-auto px-4 py-12 max-w-3xl">
+      <div class="prose prose-invert prose-neutral prose-terminal max-w-none">
+        <Content />
+      </div>
+    </div>
+  </article>
+</Layout>
