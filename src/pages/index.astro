@@ -1,16 +1,26 @@
 ---
-import "../styles/global.css";
+import Layout from "@/layouts/Layout.astro";
+import Hero from "@/components/shared/Hero.astro";
+import { Dithering } from "@paper-design/shaders-react";
 ---
 
-<html lang="en" class="dark">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
-  </head>
-  <body>
-    <h1>Astro</h1>
-  </body>
-</html>
+<Layout title="Astro | Portfolio">
+  <div class="flex min-h-screen">
+    <div class="w-3/5 p-8">
+      <Hero />
+    </div>
+    <div class="w-2/5">
+      <Dithering
+        client:load
+        width="100%"
+        height="100%"
+        colorBack="hsl(0, 0%, 0%)"
+        colorFront="hsl(320, 100%, 70%)"
+        shape="simplex"
+        type="4x4"
+        size={3}
+        speed={0.5}
+      />
+    </div>
+  </div>
+</Layout>
