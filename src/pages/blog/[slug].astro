@@ -1,43 +1,43 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import FormattedDate from "@/components/blog/FormattedDate.astro";
-import { getCollection } from "astro:content";
-import type { CollectionEntry } from "astro:content";
+import Layout from '@/layouts/Layout.astro'
+import FormattedDate from '@/components/blog/FormattedDate.astro'
+import { getCollection } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog");
+  const posts = await getCollection('blog')
   return posts.map((post) => ({
     params: { slug: post.slug },
     props: post,
-  }));
+  }))
 }
 
-const post = Astro.props as CollectionEntry<"blog">;
-const { Content } = await post.render();
+const post = Astro.props as CollectionEntry<'blog'>
+const { Content } = await post.render()
 ---
 
 <Layout title={post.data.title} description={post.data.description}>
   <article class="min-h-screen pb-20">
     <header
-      class="border-b border-neutral-800 bg-neutral-900/30 relative overflow-hidden"
+      class="relative overflow-hidden border-b border-neutral-800 bg-neutral-900/30"
     >
       <!-- Grid pattern -->
-      <div class="absolute inset-0 blog-header-grid"></div>
+      <div class="blog-header-grid absolute inset-0"></div>
       <div
-        class="container mx-auto px-4 py-12 md:py-20 max-w-4xl relative z-10"
+        class="relative z-10 container mx-auto max-w-4xl px-4 py-12 md:py-20"
       >
         <a
           href="/blog"
-          class="group inline-flex items-center gap-2 text-sm font-mono text-neutral-500 hover:text-accent mb-8 transition-colors"
+          class="group mb-8 inline-flex items-center gap-2 font-mono text-sm text-neutral-500 transition-colors hover:text-accent"
           aria-label="Back to blog"
         >
-          <span class="group-hover:-translate-x-1 transition-transform"
+          <span class="transition-transform group-hover:-translate-x-1"
             >&lt;</span
           >
           cd ..
         </a>
         <div
-          class="flex flex-wrap gap-4 text-xs font-mono uppercase tracking-wider text-neutral-500 mb-4"
+          class="mb-4 flex flex-wrap gap-4 font-mono text-xs tracking-wider text-neutral-500 uppercase"
         >
           <div class="flex items-center gap-2">
             <span class="text-fuchsia-500">@</span>
@@ -53,25 +53,25 @@ const { Content } = await post.render();
           }
           <div class="flex items-center gap-2">
             <span class="text-neutral-300">[]</span>
-            {post.data.tags.join(", ")}
+            {post.data.tags.join(', ')}
           </div>
         </div>
         <h1
-          class="text-3xl md:text-5xl font-bold font-sans text-neutral-100 tracking-tight leading-tight mb-6"
+          class="mb-6 font-sans text-3xl leading-tight font-bold tracking-tight text-neutral-100 md:text-5xl"
         >
           {post.data.title}
         </h1>
         {
           post.data.description && (
-            <p class="text-lg md:text-xl text-neutral-400 leading-relaxed max-w-2xl font-sans">
+            <p class="max-w-2xl font-sans text-lg leading-relaxed text-neutral-400 md:text-xl">
               {post.data.description}
             </p>
           )
         }
       </div>
     </header>
-    <div class="container mx-auto px-4 py-12 max-w-4xl">
-      <div class="prose prose-invert prose-neutral prose-terminal max-w-none">
+    <div class="container mx-auto max-w-4xl px-4 py-12">
+      <div class="prose-terminal prose max-w-none prose-neutral prose-invert">
         <Content />
       </div>
     </div>

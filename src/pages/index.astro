@@ -1,15 +1,21 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import Hero from "@/components/home/Hero.astro";
-import { Dithering } from "@paper-design/shaders-react";
+import Layout from '@/layouts/Layout.astro'
+import Hero from '@/components/home/Hero.astro'
+import Footer from '@/components/shared/Footer.astro'
+import { Dithering } from '@paper-design/shaders-react'
 ---
 
-<Layout title="Astro | Portfolio">
-  <div class="flex min-h-screen">
-    <div class="w-3/5 p-8">
+<Layout title="Yuki Shimizu | Portfolio">
+  <div class="relative flex min-h-screen">
+    <!-- Content overlay on mobile, left column on desktop -->
+    <div
+      class="relative z-10 flex w-full flex-col px-6 py-12 md:w-3/5 md:px-16"
+    >
       <Hero />
+      <Footer />
     </div>
-    <div class="w-2/5">
+    <!-- Dithering: full-screen on mobile, right column on desktop -->
+    <div class="absolute inset-0 md:relative md:order-2 md:w-2/5">
       <Dithering
         client:load
         width="100%"
@@ -19,8 +25,13 @@ import { Dithering } from "@paper-design/shaders-react";
         shape="simplex"
         type="4x4"
         size={3}
-        speed={0.5}
+        speed={0.4}
       />
+      <!-- Gradient overlay for mobile readability -->
+      <div
+        class="absolute inset-0 bg-linear-to-r from-black/90 via-black/60 to-transparent md:hidden"
+      >
+      </div>
     </div>
   </div>
 </Layout>

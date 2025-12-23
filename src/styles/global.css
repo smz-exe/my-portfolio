@@ -1,14 +1,16 @@
-@import "tailwindcss";
-@plugin "@tailwindcss/typography";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: "Geist Sans", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
-    Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-sans:
+    'Geist Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-mono:
+    'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -137,10 +139,8 @@
 
 /* Blog header effects */
 .blog-header-grid {
-  background-image: linear-gradient(
-      rgba(255, 255, 255, 0.05) 1px,
-      transparent 1px
-    ),
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
   background-size: 24px 24px;
 }
@@ -149,23 +149,42 @@
 @keyframes glitch {
   0%,
   100% {
-    text-shadow: -2px 0 theme(colors.cyan.400), 2px 0 theme(colors.fuchsia.400);
+    text-shadow:
+      -2px 0 theme(colors.cyan.400),
+      2px 0 theme(colors.fuchsia.400);
   }
   20% {
-    text-shadow: 2px 1px theme(colors.cyan.400),
+    text-shadow:
+      2px 1px theme(colors.cyan.400),
       -3px -1px theme(colors.fuchsia.400);
   }
   40% {
-    text-shadow: -3px -1px theme(colors.cyan.400),
+    text-shadow:
+      -3px -1px theme(colors.cyan.400),
       2px 1px theme(colors.fuchsia.400);
   }
   60% {
-    text-shadow: 1px 2px theme(colors.cyan.400),
+    text-shadow:
+      1px 2px theme(colors.cyan.400),
       -2px 0 theme(colors.fuchsia.400);
   }
   80% {
-    text-shadow: -2px -1px theme(colors.cyan.400),
+    text-shadow:
+      -2px -1px theme(colors.cyan.400),
       3px 1px theme(colors.fuchsia.400);
+  }
+}
+
+/* Glitch hover utility */
+@utility hover-glitch {
+  @apply transition-all duration-150;
+
+  &:hover {
+    @apply text-neutral-100;
+    animation: glitch 0.3s ease;
+    text-shadow:
+      -2px 0 theme(colors.cyan.400),
+      2px 0 theme(colors.fuchsia.400);
   }
 }
 
@@ -190,21 +209,23 @@
       @apply text-neutral-100;
       border-color: transparent;
       animation: glitch 0.3s ease;
-      text-shadow: -2px -0.2px theme(colors.cyan.400),
-        2px 0.2px theme(colors.fuchsia.400);
+      text-shadow:
+        -2px 0 theme(colors.cyan.400),
+        2px 0 theme(colors.fuchsia.400);
     }
   }
 
   /* Strong */
   strong {
-    @apply text-neutral-100 font-semibold;
-    text-shadow: -0.6px -0.2px theme(colors.cyan.300),
+    @apply font-semibold text-neutral-100;
+    text-shadow:
+      -0.6px -0.2px theme(colors.cyan.300),
       0.6px 0.2px theme(colors.fuchsia.300);
   }
 
   /* Inline code */
   code:not(pre code) {
-    @apply text-neutral-300 bg-neutral-800/50 px-1.5 py-0.5 rounded-none border border-neutral-700/50;
+    @apply rounded-none border border-neutral-700/50 bg-neutral-800/50 px-1.5 py-0.5 text-neutral-300;
     &::before,
     &::after {
       content: none;
@@ -213,28 +234,30 @@
 
   /* Code blocks with terminal window chrome */
   pre {
-    @apply relative pt-10 bg-neutral-950 border border-neutral-800 rounded-none overflow-hidden;
+    @apply relative overflow-hidden rounded-none border border-neutral-800 bg-neutral-950 pt-10;
 
     &::before {
-      content: "terminal";
-      @apply absolute top-0 inset-x-0 h-7 flex items-center px-3 bg-neutral-900 border-b border-neutral-800 text-[10px] text-neutral-500 font-mono select-none;
+      content: 'terminal';
+      @apply absolute inset-x-0 top-0 flex h-7 items-center border-b border-neutral-800 bg-neutral-900 px-3 font-mono text-[10px] text-neutral-500 select-none;
     }
 
     &::after {
-      content: "";
-      @apply absolute top-2.5 right-3 size-2 bg-neutral-600 rounded-full;
-      box-shadow: -10px 0 0 #525252, -20px 0 0 #525252;
+      content: '';
+      @apply absolute top-2.5 right-3 size-2 rounded-full bg-neutral-600;
+      box-shadow:
+        -10px 0 0 #525252,
+        -20px 0 0 #525252;
     }
   }
 
   /* Blockquotes */
   blockquote {
-    @apply not-italic border-l-2 border-neutral-600 bg-neutral-800/20 px-4 py-1 text-neutral-400;
+    @apply border-l-2 border-neutral-600 bg-neutral-800/20 px-4 py-1 text-neutral-400 not-italic;
   }
 
   /* List markers */
   ul > li::marker {
-    content: "> ";
+    content: '> ';
     @apply text-neutral-500;
   }
 }

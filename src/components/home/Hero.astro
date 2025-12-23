@@ -1,52 +1,56 @@
 ---
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from '@/components/ui/button'
 ---
 
-<section class="relative pt-32 pb-20 md:pt-48 md:pb-32 container mx-auto px-4">
-  <div class="max-w-3xl space-y-8">
-    <div
-      class="inline-flex items-center border border-neutral-800 bg-neutral-900/50 px-3 py-1 text-sm font-mono text-neutral-400 backdrop-blur-sm"
-    >
-      <span class="mr-2 h-2 w-2 animate-pulse bg-neutral-200"></span>
-      SYSTEM_READY
-    </div>
-
+<section class="relative z-10 flex flex-1 flex-col justify-center">
+  <div class="mb-10 space-y-6">
     <h1
-      class="text-5xl font-bold tracking-tight text-foreground sm:text-7xl font-sans"
+      class="mt-8 font-sans text-6xl leading-none font-bold tracking-tighter text-foreground select-none md:text-8xl"
     >
-      Building logic <br />
-      in an <span class="text-primary">illogical world</span>.
+      YUKI <br />
+      <span class="text-neutral-500">SHI</span>MIZU
     </h1>
 
-    <p
-      class="max-w-2xl text-lg text-muted-foreground sm:text-xl font-sans leading-relaxed"
-    >
-      I’m a Computer Science senior specializing in network protocols and
-      software architecture. Crafting minimal, high-performance systems with <span
-        class="text-foreground font-medium">C++</span
-      > & <span class="text-foreground font-medium font">Python</span>.
-    </p>
-
-    <div class="flex flex-col sm:flex-row gap-4 pt-4">
-      <a
-        href="/blog"
-        class={buttonVariants({
-          variant: "default",
-          className: "h-12 px-8 font-mono",
-        })}
+    <div class="border-l-2 border-fuchsia-500 py-1 pl-4">
+      <p
+        class="font-mono text-xl font-medium text-fuchsia-500 italic md:text-2xl"
       >
-        READ_BLOG
-      </a>
-
-      <a
-        href="/about"
-        class={buttonVariants({
-          variant: "outline",
-          className: "h-12 px-8 font-mono",
-        })}
-      >
-        > VIEW_CV
-      </a>
+        "I want to know <br class="block md:hidden" />what information is."
+      </p>
     </div>
+
+    <p
+      class="max-w-2xl font-sans text-lg leading-relaxed text-neutral-300 md:text-xl md:text-neutral-400"
+    >
+      Software Engineer & Engineering Senior. <br class="hidden sm:block" />
+      Researching <span class="font-bold text-foreground md:font-medium"
+        >Explainable AI</span
+      > through the lens of <span
+        class="font-bold text-foreground md:font-medium"
+        >Information Theory</span
+      >.
+    </p>
+  </div>
+
+  <div class="flex flex-wrap gap-4">
+    <a
+      href="/blog"
+      class={buttonVariants({
+        variant: 'default',
+        className: 'h-12 px-8 font-mono',
+      })}
+    >
+      READ_BLOG
+    </a>
+
+    <a
+      href="/about"
+      class={buttonVariants({
+        variant: 'outline',
+        className: 'h-12 px-8 font-mono',
+      })}
+    >
+      > VIEW_CV
+    </a>
   </div>
 </section>
