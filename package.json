@@ -2,11 +2,14 @@
   "name": "my-portfolio",
   "type": "module",
   "version": "0.0.1",
+  "packageManager": "pnpm@10.19.0",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@astrojs/react": "^4.4.2",

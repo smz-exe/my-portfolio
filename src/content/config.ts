@@ -1,4 +1,4 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection, z } from 'astro:content';
 
 const blog = defineCollection({
   schema: ({ image }) =>
@@ -9,7 +9,7 @@ const blog = defineCollection({
       updatedAt: z.coerce.date().optional(),
       heroImage: image().optional(),
       tags: z.array(z.string()).default([]),
-      state: z.enum(["draft", "published", "archived"]).default("draft"),
+      state: z.enum(['draft', 'published', 'archived']).default('draft'),
     }),
 });
 

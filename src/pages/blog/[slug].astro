@@ -1,39 +1,33 @@
 ---
-import Layout from '@/layouts/Layout.astro'
-import FormattedDate from '@/components/blog/FormattedDate.astro'
-import { getCollection } from 'astro:content'
-import type { CollectionEntry } from 'astro:content'
+import Layout from '@/layouts/Layout.astro';
+import FormattedDate from '@/components/blog/FormattedDate.astro';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog')
+  const posts = await getCollection('blog');
   return posts.map((post) => ({
     params: { slug: post.slug },
     props: post,
-  }))
+  }));
 }
 
-const post = Astro.props as CollectionEntry<'blog'>
-const { Content } = await post.render()
+const post = Astro.props as CollectionEntry<'blog'>;
+const { Content } = await post.render();
 ---
 
 <Layout title={post.data.title} description={post.data.description}>
   <article class="min-h-screen pb-20">
-    <header
-      class="relative overflow-hidden border-b border-neutral-800 bg-neutral-900/30"
-    >
+    <header class="relative overflow-hidden border-b border-neutral-800 bg-neutral-900/30">
       <!-- Grid pattern -->
       <div class="blog-header-grid absolute inset-0"></div>
-      <div
-        class="relative z-10 container mx-auto max-w-4xl px-4 py-12 md:py-20"
-      >
+      <div class="relative z-10 container mx-auto max-w-4xl px-4 py-12 md:py-20">
         <a
           href="/blog"
           class="group mb-8 inline-flex items-center gap-2 font-mono text-sm text-neutral-500 transition-colors hover:text-accent"
           aria-label="Back to blog"
         >
-          <span class="transition-transform group-hover:-translate-x-1"
-            >&lt;</span
-          >
+          <span class="transition-transform group-hover:-translate-x-1">&lt;</span>
           cd ..
         </a>
         <div
