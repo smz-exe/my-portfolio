@@ -1,16 +1,14 @@
 ---
-import Layout from '@/layouts/Layout.astro'
-import Hero from '@/components/home/Hero.astro'
-import Footer from '@/components/shared/Footer.astro'
-import { Dithering } from '@paper-design/shaders-react'
+import Layout from '@/layouts/Layout.astro';
+import Hero from '@/components/home/Hero.astro';
+import Footer from '@/components/shared/Footer.astro';
+import { Dithering } from '@paper-design/shaders-react';
 ---
 
-<Layout title="Yuki Shimizu | Portfolio">
+<Layout title="Home | Portfolio">
   <div class="relative flex min-h-screen">
     <!-- Content overlay on mobile, left column on desktop -->
-    <div
-      class="relative z-10 flex w-full flex-col px-6 py-12 md:w-3/5 md:px-16"
-    >
+    <div class="relative z-10 flex w-full flex-col px-6 py-12 md:w-3/5 md:px-16">
       <Hero />
       <Footer />
     </div>
