@@ -98,9 +98,8 @@
   --primary: oklch(66.7% 0.295 322.15); /* fuchsia-500 */
   --primary-foreground: oklch(0.205 0 0);
 
-  --secondary: oklch(85.2% 0.199 91.936); /* yellow-400 */
-  --secondary-foreground: oklch(20.5% 0 0);
-
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);
 
@@ -136,27 +135,41 @@
   }
 }
 
-/* Glitch animation */
+/* Blog header effects */
+.blog-header-grid {
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.05) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Glitch animation - text-shadow only */
 @keyframes glitch {
   0%,
   100% {
-    transform: translate(0);
+    text-shadow: -2px 0 theme(colors.cyan.400), 2px 0 theme(colors.fuchsia.400);
   }
   20% {
-    transform: translate(-2px, 1px);
+    text-shadow: 2px 1px theme(colors.cyan.400),
+      -3px -1px theme(colors.fuchsia.400);
   }
   40% {
-    transform: translate(2px, -1px);
+    text-shadow: -3px -1px theme(colors.cyan.400),
+      2px 1px theme(colors.fuchsia.400);
   }
   60% {
-    transform: translate(-1px, 1px);
+    text-shadow: 1px 2px theme(colors.cyan.400),
+      -2px 0 theme(colors.fuchsia.400);
   }
   80% {
-    transform: translate(1px, -1px);
+    text-shadow: -2px -1px theme(colors.cyan.400),
+      3px 1px theme(colors.fuchsia.400);
   }
 }
 
-/* Monochrome prose with glitch accent */
+/* Monochrome prose */
 .prose.prose-terminal {
   /* Headings */
   h1,
@@ -177,14 +190,16 @@
       @apply text-neutral-100;
       border-color: transparent;
       animation: glitch 0.3s ease;
-      text-shadow: -2px 0 theme(colors.cyan.400),
-        2px 0 theme(colors.fuchsia.400);
+      text-shadow: -2px -0.2px theme(colors.cyan.400),
+        2px 0.2px theme(colors.fuchsia.400);
     }
   }
 
   /* Strong */
   strong {
     @apply text-neutral-100 font-semibold;
+    text-shadow: -0.6px -0.2px theme(colors.cyan.300),
+      0.6px 0.2px theme(colors.fuchsia.300);
   }
 
   /* Inline code */
