@@ -1,42 +1,40 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import FormattedDate from "@/components/blog/FormattedDate.astro";
-import { getCollection } from "astro:content";
+import Layout from '@/layouts/Layout.astro';
+import FormattedDate from '@/components/blog/FormattedDate.astro';
+import { getCollection } from 'astro:content';
 
-const posts = (await getCollection("blog"))
-  .filter((post) => post.data.state !== "draft")
+const posts = (await getCollection('blog'))
+  .filter((post) => post.data.state !== 'draft')
   .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
-
-const getFakeSize = (str: string) => {
-  return str.length * 102 + Math.floor(Math.random() * 500) + "B";
-};
 ---
 
 <Layout title="Blog_Index | System Logs">
-  <section class="container mx-auto px-4 py-20 max-w-5xl">
-    <div
-      class="mb-8 font-mono text-sm md:text-base border-b border-neutral-800 pb-4"
+  <section class="container mx-auto max-w-4xl px-4 py-20">
+    <a
+      href="/"
+      class="group mb-8 inline-flex items-center gap-2 font-mono text-sm text-neutral-500 transition-colors hover:text-accent"
+      aria-label="Back to home"
     >
+      <span class="transition-transform group-hover:-translate-x-1">&lt;</span>
+      cd ..
+    </a>
+    <div class="mb-8 border-b border-neutral-800 pb-4 font-mono text-sm md:text-base">
       <div class="flex flex-col gap-2 text-muted-foreground">
         <span class="block">
-          <span class="text-neutral-400">root@portfolio</span>:<span
-            class="text-neutral-500">~/content/blog</span
-          >$ ls
-          <span class="hidden md:inline">-la --sort=time</span>
-          <span class="inline-block ml-1 text-primary animate-pulse">_</span>
+          <span class="text-neutral-400">root@portfolio</span>:<span class="text-neutral-500"
+            >~/content/blog</span
+          >$ ls -lt
+          <span class="ml-1 inline-block animate-pulse text-primary">_</span>
         </span>
         <span class="block text-neutral-600">
           total {posts.length} files found...
         </span>
       </div>
     </div>
-    <ul class="flex flex-col space-1">
+    <ul class="space-1 flex flex-col">
       <li
-        class="hidden md:flex items-center gap-4 px-4 py-2 text-xs font-mono text-neutral-600 uppercase tracking-wider"
+        class="hidden items-center gap-4 px-4 py-2 font-mono text-xs tracking-wider text-neutral-600 uppercase md:flex"
       >
-        <span class="w-24">Perms</span>
-        <span class="w-20">User</span>
-        <span class="w-24">Size</span>
         <span class="w-32">Date</span>
         <span class="flex-1">Filename</span>
       </li>
@@ -45,32 +43,21 @@ const getFakeSize = (str: string) => {
         posts.map((post) => (
           <li>
             <a href={`/blog/${post.slug}`} class="group block">
-              <div class="relative flex items-center gap-4 px-4 py-3 md:py-2 border border-transparent rounded-none transition-all duration-200 hover:bg-neutral-900 hover:border-neutral-800">
-                <span class="absolute left-0 top-0 h-full w-0.5 bg-primary opacity-0 group-hover:opacity-100 transition-opacity" />
-                <span class="hidden md:block w-24 font-mono text-xs text-neutral-600 group-hover:text-neutral-500">
-                  -rw-r--r--
-                </span>
+              <div class="relative flex items-center gap-4 rounded-none border border-transparent px-4 py-3 transition-all duration-200 hover:border-neutral-800 hover:bg-neutral-900 md:py-2">
+                <span class="absolute top-0 left-0 h-full w-0.5 bg-primary opacity-0 transition-opacity group-hover:opacity-100" />
 
-                <span class="hidden md:block w-20 font-mono text-xs text-neutral-600">
-                  admin
-                </span>
-
-                <span class="hidden md:block w-24 font-mono text-xs text-neutral-600">
-                  {getFakeSize(post.data.title)}
-                </span>
-
-                <div class="w-24 md:w-32 font-mono text-xs md:text-sm text-neutral-500 shrink-0">
+                <div class="w-24 shrink-0 font-mono text-xs text-neutral-500 md:w-32 md:text-sm">
                   <FormattedDate date={post.data.publishedAt} />
                 </div>
 
-                <div class="flex flex-col md:flex-row md:items-center gap-2 flex-1 min-w-0">
-                  <h3 class="font-sans font-medium text-neutral-300 group-hover:text-neutral-100 transition-colors truncate text-base md:text-sm">
+                <div class="flex min-w-0 flex-1 flex-col gap-4 md:flex-row md:items-center">
+                  <h3 class="truncate font-sans text-base font-medium text-neutral-300 transition-colors group-hover:text-neutral-100 md:text-sm">
                     {post.data.title}
                   </h3>
 
                   <div class="flex gap-2">
                     {post.data.tags.map((tag) => (
-                      <span class="text-[10px] font-mono border border-neutral-800 px-1 text-neutral-600 group-hover:border-neutral-600 group-hover:text-neutral-400 transition-colors">
+                      <span class="border border-neutral-800 px-1 font-mono text-[10px] text-neutral-600 transition-colors group-hover:border-neutral-600 group-hover:text-neutral-400">
                         {tag}
                       </span>
                     ))}
