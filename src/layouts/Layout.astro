@@ -4,6 +4,8 @@ import '@fontsource/geist-sans/400.css';
 import '@fontsource/geist-sans/600.css';
 import '@fontsource/geist-mono/400.css';
 import '@fontsource/geist-mono/600.css';
+import SpeedInsights from '@vercel/speed-insights/astro';
+import Analytics from '@vercel/analytics/astro';
 
 interface Props {
   title: string;
@@ -21,6 +23,7 @@ const { title, description = 'Student & Developer Portfolio' } = Astro.props;
     <link rel="shortcut icon" href="favicon.svg" type="image/svg+xml" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <Analytics />
   </head>
   <body class="flex min-h-screen flex-col bg-background text-foreground antialiased">
     <main class="flex-1">
@@ -32,3 +35,5 @@ const { title, description = 'Student & Developer Portfolio' } = Astro.props;
     </main>
   </body>
 </html>
+
+<SpeedInsights />

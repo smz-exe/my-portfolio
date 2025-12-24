@@ -1,8 +1,8 @@
 ---
-import Layout from '@/layouts/Layout.astro'
-import Footer from '@/components/shared/Footer.astro'
-import { Image } from 'astro:assets'
-import profileImage from './profile.jpeg'
+import Layout from '@/layouts/Layout.astro';
+import Footer from '@/components/shared/Footer.astro';
+import { Image } from 'astro:assets';
+import profileImage from './profile.jpeg';
 ---
 
 <Layout title="About | Yuki Shimizu">
@@ -16,13 +16,11 @@ import profileImage from './profile.jpeg'
       cd ..
     </a>
     <!-- Terminal Header -->
-    <div
-      class="mb-12 border-b border-neutral-800 pb-4 font-mono text-sm md:text-base"
-    >
+    <div class="mb-12 border-b border-neutral-800 pb-4 font-mono text-sm md:text-base">
       <div class="flex flex-col gap-2 text-muted-foreground">
         <span class="block">
-          <span class="text-neutral-400">root@portfolio</span>:<span
-            class="text-neutral-500">~</span
+          <span class="text-neutral-400">root@portfolio</span>:<span class="text-neutral-500"
+            >~</span
           >$ cat about.md
           <span class="ml-1 inline-block animate-pulse text-primary">_</span>
         </span>
@@ -32,19 +30,16 @@ import profileImage from './profile.jpeg'
     <!-- Profile Section -->
     <div class="mb-16 grid gap-8 md:grid-cols-3">
       <div class="md:col-span-2">
-        <h1
-          class="mb-4 font-sans text-4xl font-bold tracking-tight text-foreground"
-        >
+        <h1 class="mb-4 font-sans text-4xl font-bold tracking-tight text-foreground">
           Yuki Shimizu
         </h1>
         <p class="mb-4 font-mono text-sm text-fuchsia-500">
           Software Engineer & Senior Engineering Student
         </p>
         <p class="leading-relaxed text-neutral-400">
-          Passionate about building elegant software solutions and exploring the
-          intersection of AI and Information Theory. Currently researching
-          Explainable AI methods to make deep learning models more
-          interpretable.
+          Passionate about building elegant software solutions and exploring the intersection of AI
+          and Information Theory. Currently researching Explainable AI methods to make deep learning
+          models more interpretable.
         </p>
       </div>
       <div
@@ -84,13 +79,11 @@ import profileImage from './profile.jpeg'
           <h3 class="mb-3 font-mono text-sm text-neutral-300">Frameworks</h3>
           <div class="flex flex-wrap gap-2">
             {
-              ['React', 'Next.js', 'NestJs', 'FastAPI', 'TensorFlow'].map(
-                (skill) => (
-                  <span class="border border-neutral-700 px-2 py-1 font-mono text-xs text-neutral-400">
-                    {skill}
-                  </span>
-                )
-              )
+              ['React', 'Next.js', 'NestJs', 'FastAPI', 'TensorFlow'].map((skill) => (
+                <span class="border border-neutral-700 px-2 py-1 font-mono text-xs text-neutral-400">
+                  {skill}
+                </span>
+              ))
             }
           </div>
         </div>
@@ -107,17 +100,13 @@ import profileImage from './profile.jpeg'
       <div class="space-y-6">
         <div class="border-l-2 border-neutral-400 pl-4">
           <div class="flex items-baseline justify-between">
-            <h3 class="font-sans text-lg font-medium text-neutral-200">
-              Software Engineer Intern
-            </h3>
-            <span class="font-mono text-xs text-neutral-600"
-              >Sep 2025 - Present</span
-            >
+            <h3 class="font-sans text-lg font-medium text-neutral-200">Software Engineer Intern</h3>
+            <span class="font-mono text-xs text-neutral-600">Sep 2025 - Present</span>
           </div>
           <p class="font-mono text-sm text-fuchsia-500">Pracareer</p>
           <p class="mt-2 max-w-xl text-sm text-neutral-500">
-            Full-stack development with Next.js and NestJS, collaborating
-            closely with the business team. Contributed to MVP launch of
+            Full-stack development with Next.js and NestJS, collaborating closely with the business
+            team. Contributed to MVP launch of
             <a
               href="https://unicorncareer.jp/"
               target="_blank"
@@ -130,28 +119,19 @@ import profileImage from './profile.jpeg'
         </div>
         <div class="border-l-2 border-neutral-400 pl-4">
           <div class="flex items-baseline justify-between">
-            <h3 class="font-sans text-lg font-medium text-neutral-200">
-              XAI Research
-            </h3>
-            <span class="font-mono text-xs text-neutral-600"
-              >Jan 2025 - Present</span
-            >
+            <h3 class="font-sans text-lg font-medium text-neutral-200">XAI Research</h3>
+            <span class="font-mono text-xs text-neutral-600">Jan 2025 - Present</span>
           </div>
           <p class="font-mono text-sm text-fuchsia-500">University Lab</p>
           <p class="mt-2 max-w-xl text-sm text-neutral-500">
-            Investigating DNN interpretability through analysis of internal
-            representations, model parameters, and information flow quantified
-            via Mutual Information.
+            Investigating DNN interpretability through analysis of internal representations, model
+            parameters, and information flow quantified via Mutual Information.
           </p>
         </div>
         <div class="border-l-2 border-neutral-800 pl-4">
           <div class="flex items-baseline justify-between">
-            <h3 class="font-sans text-lg font-medium text-neutral-200">
-              Software Engineer Intern
-            </h3>
-            <span class="font-mono text-xs text-neutral-600"
-              >Sep 2024 - Mar 2025</span
-            >
+            <h3 class="font-sans text-lg font-medium text-neutral-200">Software Engineer Intern</h3>
+            <span class="font-mono text-xs text-neutral-600">Sep 2024 - Mar 2025</span>
           </div>
           <p class="font-mono text-sm text-fuchsia-500">Conico</p>
           <p class="mt-2 max-w-xl text-sm text-neutral-500">
@@ -163,9 +143,8 @@ import profileImage from './profile.jpeg'
               class="text-neutral-400 underline transition-colors hover:text-accent"
               >sst.sendenkaigi.com</a
             >
-            as part of a cross-functional team. Developed frontend features with
-            Next.js, implemented API integration layers, and contributed to Hono
-            backend services.
+            as part of a cross-functional team. Developed frontend features with Next.js, implemented
+            API integration layers, and contributed to Hono backend services.
           </p>
         </div>
       </div>
@@ -184,26 +163,18 @@ import profileImage from './profile.jpeg'
             <h3 class="font-sans text-lg font-medium text-neutral-200">
               M.E. Applied Physics and Physico-Informatics
             </h3>
-            <span class="font-mono text-xs text-cyan-400">
-              *Starting Apr 2026
-            </span>
+            <span class="font-mono text-xs text-cyan-400"> *Starting Apr 2026 </span>
           </div>
-          <p class="font-mono text-sm text-fuchsia-500">
-            Keio University, Japan
-          </p>
+          <p class="font-mono text-sm text-fuchsia-500">Keio University, Japan</p>
         </div>
         <div class="border-l-2 border-neutral-400 pl-4">
           <div class="flex items-baseline justify-between">
             <h3 class="font-sans text-lg font-medium text-neutral-200">
               B.E. Applied Physics and Physico-Informatics
             </h3>
-            <span class="font-mono text-xs text-neutral-600"
-              >Apr 2022 - Mar 2026 (Expected)</span
-            >
+            <span class="font-mono text-xs text-neutral-600">Apr 2022 - Mar 2026 (Expected)</span>
           </div>
-          <p class="font-mono text-sm text-fuchsia-500">
-            Keio University, Japan
-          </p>
+          <p class="font-mono text-sm text-fuchsia-500">Keio University, Japan</p>
         </div>
       </div>
     </div>
