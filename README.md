@@ -1,4 +1,8 @@
-# Astro Starter Kit: Minimal
+# smz.sh
+
+Please check it out!: [My Developer Portfolio](https://smz.sh)
+
+---
 
 ```sh
 pnpm create astro@latest -- --template minimal
