@@ -17,8 +17,16 @@ Inside of your Astro project, you'll see the following folders and files:
 ```text
 /
 ├── public/
+│   └── favicon.svg
 ├── src/
+│   ├── assets/
+│   │   └── about/
+│   │       └── profile.png
+│   ├── content/
+│   │   └── blog/
 │   └── pages/
+│       ├── about/
+│       │   └── index.astro
 │       └── index.astro
 └── package.json
 ```
@@ -28,6 +36,7 @@ Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page
 There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
 
 Any static assets, like images, can be placed in the `public/` directory.
+The assets in the `public/` are served as-is, not compressed.
 
 ## 🧞 Commands
 
