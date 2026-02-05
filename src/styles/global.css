@@ -145,6 +145,21 @@
   background-size: 24px 24px;
 }
 
+/* Blink animation e.g., terminal cursor */
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@utility animate-blink {
+  animation: blink 1s step-end infinite;
+}
+
 /* Glitch animation - text-shadow only */
 @keyframes glitch {
   0%,

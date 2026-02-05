@@ -1,12 +1,13 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import Footer from '@/components/shared/Footer.astro';
+import TimelineEntry from '@/components/about/TimelineEntry.astro';
 import { Image } from 'astro:assets';
 import profileImage from '@/assets/about/profile.png';
 ---
 
 <Layout title="About | Yuki Shimizu">
-  <section class="container mx-auto max-w-4xl px-4 py-20">
+  <section class="container mx-auto max-w-4xl px-4 py-12 md:py-20">
     <a
       href="/"
       class="group mb-8 inline-flex items-center gap-2 font-mono text-sm text-neutral-500 transition-colors hover:text-accent"
@@ -16,13 +17,13 @@ import profileImage from '@/assets/about/profile.png';
       cd ..
     </a>
     <!-- Terminal Header -->
-    <div class="mb-12 border-b border-neutral-800 pb-4 font-mono text-sm md:text-base">
+    <div class="mb-8 border-b border-neutral-800 pb-4 font-mono text-sm md:mb-12 md:text-base">
       <div class="flex flex-col gap-2 text-muted-foreground">
         <span class="block">
           <span class="text-neutral-400">root@portfolio</span>:<span class="text-neutral-500"
             >~</span
           >$ cat about.md
-          <span class="ml-1 inline-block animate-pulse text-primary">_</span>
+          <span class="ml-1 inline-block animate-blink text-neutral-400">_</span>
         </span>
       </div>
     </div>
@@ -98,55 +99,25 @@ import profileImage from '@/assets/about/profile.png';
         <span class="text-cyan-400">#</span> Experience
       </h2>
       <div class="space-y-6">
-        <div class="border-l-2 border-neutral-400 pl-4">
-          <div class="flex items-baseline justify-between">
-            <h3 class="font-sans text-lg font-medium text-neutral-200">Software Engineer Intern</h3>
-            <span class="font-mono text-xs text-neutral-600">Sep 2025 - Present</span>
-          </div>
-          <p class="font-mono text-sm text-fuchsia-500">Pracareer</p>
-          <p class="mt-2 max-w-xl text-sm text-neutral-500">
-            Full-stack development with Next.js and NestJS, collaborating closely with the business
-            team. Contributed to MVP launch of
-            <a
-              href="https://unicorncareer.jp/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-neutral-400 underline transition-colors hover:text-accent"
-              >unicorncareer.jp</a
-            >
-            and continue iterating based on user feedback.
-          </p>
-        </div>
-        <div class="border-l-2 border-neutral-400 pl-4">
-          <div class="flex items-baseline justify-between">
-            <h3 class="font-sans text-lg font-medium text-neutral-200">XAI Research</h3>
-            <span class="font-mono text-xs text-neutral-600">Jan 2025 - Present</span>
-          </div>
-          <p class="font-mono text-sm text-fuchsia-500">University Lab</p>
-          <p class="mt-2 max-w-xl text-sm text-neutral-500">
-            Investigating DNN interpretability through analysis of internal representations, model
-            parameters, and information flow quantified via Mutual Information.
-          </p>
-        </div>
-        <div class="border-l-2 border-neutral-800 pl-4">
-          <div class="flex items-baseline justify-between">
-            <h3 class="font-sans text-lg font-medium text-neutral-200">Software Engineer Intern</h3>
-            <span class="font-mono text-xs text-neutral-600">Sep 2024 - Mar 2025</span>
-          </div>
-          <p class="font-mono text-sm text-fuchsia-500">Conico</p>
-          <p class="mt-2 max-w-xl text-sm text-neutral-500">
-            Shipped
-            <a
-              href="https://sst.sendenkaigi.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-neutral-400 underline transition-colors hover:text-accent"
-              >sst.sendenkaigi.com</a
-            >
-            as part of a cross-functional team. Developed frontend features with Next.js, implemented
-            API integration layers, and contributed to Hono backend services.
-          </p>
-        </div>
+        <TimelineEntry
+          title="Software Engineer Intern"
+          date="Sep 2025 - Present"
+          organization="Pracareer"
+          description='Full-stack development with Next.js and NestJS, collaborating closely with the business team. Contributed to MVP launch of <a href="https://unicorncareer.jp/" target="_blank" rel="noopener noreferrer" class="text-neutral-400 underline transition-colors hover:text-accent">unicorncareer.jp</a> and continue iterating based on user feedback.'
+        />
+        <TimelineEntry
+          title="XAI Research"
+          date="Jan 2025 - Present"
+          organization="Computational Science Lab."
+          description="Investigating DNN interpretability through analysis of internal representations, model parameters, and information flow quantified via Mutual Information."
+        />
+        <TimelineEntry
+          title="Software Engineer Intern"
+          date="Sep 2024 - Mar 2025"
+          organization="Conico"
+          borderColor="border-neutral-800"
+          description='Shipped <a href="https://sst.sendenkaigi.com/" target="_blank" rel="noopener noreferrer" class="text-neutral-400 underline transition-colors hover:text-accent">sst.sendenkaigi.com</a> as part of a cross-functional team. Developed frontend features with Next.js, implemented API integration layers, and contributed to Hono backend services.'
+        />
       </div>
     </div>
 
@@ -158,24 +129,19 @@ import profileImage from '@/assets/about/profile.png';
         <span class="text-cyan-400">#</span> Education
       </h2>
       <div class="space-y-6">
-        <div class="border-l-2 border-dashed border-neutral-600 pl-4">
-          <div class="flex items-baseline justify-between">
-            <h3 class="font-sans text-lg font-medium text-neutral-200">
-              M.E. Applied Physics and Physico-Informatics
-            </h3>
-            <span class="font-mono text-xs text-cyan-400"> *Starting Apr 2026 </span>
-          </div>
-          <p class="font-mono text-sm text-fuchsia-500">Keio University, Japan</p>
-        </div>
-        <div class="border-l-2 border-neutral-400 pl-4">
-          <div class="flex items-baseline justify-between">
-            <h3 class="font-sans text-lg font-medium text-neutral-200">
-              B.E. Applied Physics and Physico-Informatics
-            </h3>
-            <span class="font-mono text-xs text-neutral-600">Apr 2022 - Mar 2026 (Expected)</span>
-          </div>
-          <p class="font-mono text-sm text-fuchsia-500">Keio University, Japan</p>
-        </div>
+        <TimelineEntry
+          title="M.E. Applied Physics and Physico-Informatics"
+          date="*Starting Apr 2026"
+          organization="Keio University, Japan"
+          borderStyle="dashed"
+          borderColor="border-neutral-600"
+          dateColor="text-cyan-400"
+        />
+        <TimelineEntry
+          title="B.E. Applied Physics and Physico-Informatics"
+          date="Apr 2022 - Mar 2026"
+          organization="Keio University, Japan"
+        />
       </div>
     </div>
 
