@@ -1,0 +1,256 @@
+---
+title: 'Are you an instance or a plain object?'
+description: 'A Firestore bug taught me a philosophical lesson: prototypes are not data. Here’s how I redesigned a NestJS repository with Zod + explicit mappers to keep boundaries clean.'
+publishedAt: 2026-02-17
+tags: ['Firestore', 'NestJS', 'TypeScript', 'Zod', 'Architecture']
+state: 'published'
+---
+
+import PhotoSection from '@/components/blog/PhotoSection.astro';
+
+Firestore is one of those tools that feels like cheating (in a good way).
+You can build something practical fast: collections, documents, transactions, done.
+It's the engineering equivalent of instant ramen... until the day the ramen bites back.
+
+The bite usually sounds like this:
+
+> _Firestore doesn't support JavaScript Objects with custom prototypes._
+
+The sentence is Firestore's way of saying:
+
+"I store data. Not your beautiful class instances." — and fair enough.
+
+## The crime scene
+
+When this error first appeared, my first assumption was the usual one:
+
+"Oops, I probably passed a domain entity into Firestore."
+
+But nope. I _was careful_ about boundaries.
+The domain was separated from persistence.
+The object I passed wasn't a domain entity – it was a **DB model class** (a DTO-like class representing the Firestore document).
+
+It looked innocent:
+
+```ts
+await tx.update(ref, companyDbDto); // companyDbDto is a DB model class instance
+// Firestore: custom prototypes are not serializable
+```
+
+This is where the philosophical question appears:
+
+"Are you an instance... or a plain object"?
+
+Firestore only wants the latter.
+
+## The deeper mismatch: Domain ↔ DbDto ↔ POJO
+
+The real issue wasn't "domain leakage".
+It was that my persistence layer had an extra representation:
+
+- **Domain entity**: rich class (`Company`) with invariants + methods
+
+- **DB model**: also a class (`CompanyDbDto`)
+
+- **Firestore**: wants **POJOs** (plain objects)
+
+So the real pipeline was:
+
+**Company (domain class)**
+↔ **CompanyDbDto (DB class)**
+↔ **Plain Object (POJO for Firestore)**
+
+Having Domain ↔ DB is normal. But adding DB class ↔ POJO as a mandatory step is… annoying.
+
+Because it introduces a new kind of bug:
+
+- you can forget the extra conversion,
+- or assume "the converter will handle it,"
+- and then `update()` rejects it anyway.
+
+## Why converters didn't help
+
+Firestore converters are useful.
+They _feel_ like the missing ORM piece: “give Firestore a model, and it’ll serialize/deserialize for you.”
+
+That intuition is half-true, which is the most dangerous kind of truth.
+
+The important detail is this:
+
+- Some Firestore operations are “**store/retrieve an object**” flavored
+- update() is “**apply this patch**” flavored
+
+And patch-flavored APIs don’t compose well with class instances.
+`update()` expects plain update data: field paths, primitive values, Firestore `FieldValue` operations, etc.
+It’s not trying to “store an object” — it’s trying to apply a _diff_.
+
+At some point I started using this workaround:
+
+```ts
+await ref.set(partialData, { merge: true });
+```
+
+It works, but the naming bothered me. In my head:
+
+- `update()` = update existing
+- `set(..., { merge: true })` = feels like **upsert** (create if missing, otherwise merge)
+
+So yes, it's practical. But also: it's semantically slippery if you aren't explicit.
+
+## The uncomfortable options
+
+At this point I saw a few options:
+
+### Option A
+
+Keep DB models as classes, and convert manually before writing. Something like:
+
+DbDto class instance → `instanceToPlain(...)` → Firestore update/set
+
+This “works,” but it’s fragile. You have to _remember_ the conversion step in every place that writes.
+So the architecture becomes “correct… if everyone is careful forever.”
+That's not a policy — it's wishful thinking.
+
+### Option B
+
+Just use `set(..., { merge: true })` everywhere. This also works, but now your repository has fuzzy semantics unless you deliberately encode them (`create-only`, `update-only`, `upsert`, etc.).
+Otherwise you can silently create docs when you meant to update.
+
+### Option C
+
+Make persistence models match what Firestore actually stores. This was the cleanest: make the persistence representation a **plain object type**, not a class, and validate it at runtime.
+
+Which leads to the rule that fixed everything.
+
+## The design rule I adopted
+
+I ended up adopting a simple mental model:
+
+1. Firestore stores POJOs.
+   So persistence “models” should be types / plain objects, not classes.
+2. Domain can stay rich.
+   Domain entities can be classes, because they don’t go into Firestore directly.
+3. Validate Firestore reads at the boundary.
+   Firestore is schemaless, so runtime validation is a feature, not bureaucracy.
+4. Make write semantics explicit.
+   `create()` should fail if exists. `update()` should enforce invariants. Upsert should be a deliberate choice.
+
+I did consider the alternative pattern where domain entities implement something like `toPrimitives()` and the converter becomes “rich.”
+That can work too.
+But since my domain boundary wasn’t the problem, I preferred keeping the domain layer totally persistence-agnostic.
+
+## Two diagrams
+
+### Dependencies
+
+Who imports whom:
+
+```txt
+Service → Repository → (Mapper + DocSchema + Firestore Adapter)
+Domain (Company) depends on nothing
+```
+
+### Data flow
+
+What transforms into what:
+
+```txt
+READ:  Firestore POJO → Zod parse → CompanyDoc → map → Company
+WRITE: Company → map → CompanyDoc → POJO → Firestore
+```
+
+Once I separated "dependency direction" and "data flow", the design stopped feeling like spaghetti.
+
+## A concrete example
+
+The core idea is: **validate Firestore data into a doc schema**, and **map doc ↔ domain explicitly**.
+
+### 1. Doc schema
+
+Define the Firestore doc schema using Zod. Keep it plain — no classes required.
+
+```ts
+import { z } from 'zod';
+
+export const CompanyDocSchema = z.object({
+  name: z.string().min(1),
+  industry: z.enum([
+    'technology',
+    'finance',
+    'healthcare',
+    // ...
+  ]),
+  status: z.enum(['pending_approval', 'active' /* ... */]),
+  isPublic: z.boolean(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+
+  // optional fields
+  description: z.string().optional(),
+  website: z.url().optional(),
+});
+
+export type CompanyDoc = z.infer<typeof CompanyDocSchema>;
+```
+
+### 2. Mapper
+
+Convert between `CompanyDoc` and `Company`. The mapping is intentionally boring.
+
+```ts
+export function docToCompany(id: string, doc: CompanyDoc): Company {
+  return Company.reconstitute({ id, ...doc });
+}
+
+export function companyToDoc(company: Company): CompanyDoc {
+  const { id, ...doc } = company; // exclude id, keep the rest
+  return doc;
+}
+```
+
+### 3. Converter
+
+Handle Firestore ↔ `CompanyDoc` with validation. The converter becomes a safe boundary.
+
+```ts
+export const companyConverter: FirestoreDataConverter<CompanyDoc> = {
+  toFirestore(doc: CompanyDoc) {
+    return doc;
+  },
+  fromFirestore(snapshot) {
+    return CompanyDocSchema.parse(snapshot.data());
+  },
+};
+```
+
+Notice what’s missing: no `plainToInstance`, no persistence DTO classes, no “hope” that validation is happening.
+
+## Repository semantics: make them boring and explicit
+
+Firestore APIs allow too many styles of writing.
+My repository got much calmer once I made semantics explicit.
+
+- `create(company)` should fail if the doc already exists
+- `update(id, params)` should enforce domain invariants
+
+And yes: if `update` uses fetch-modify-persist, that’s a conscious tradeoff: correctness first, optimize later if needed.
+
+## Closing thoughts
+
+Firestore is great — but it’s not an ORM, and it doesn’t pretend to be.
+The weird serialization errors happen when we _implicitly_ expect ORM-like behavior: passing around class instances and assuming some magic layer will serialize it consistently.
+
+My real takeaway wasn’t “don’t use classes.” It was:
+
+- **Use classes where behavior lives (domain).**
+- **Use plain objects where data lives (persistence).**
+- **Validate at boundaries.**
+- **Make semantics explicit, or the DB will invent semantics for you.**
+
+<PhotoSection
+  src="/src/content/blog/instance-or-plain-object/20260208-snow-ginza.png"
+  alt="Snow in Ginza, Tokyo"
+  caption="Ginza, February 2026"
+/>
+
+**P.S.** In the database, nobody knows you're an instance.
