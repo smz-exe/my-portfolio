@@ -56,16 +56,7 @@ const readingTime = Math.ceil(wordCount / 200);
             </div>
             <div class="flex items-start gap-1">
               <span class="text-neutral-300">#</span>
-              <span class="flex flex-wrap">
-                {
-                  post.data.tags.map((tag, i) => (
-                    <span>
-                      {tag}
-                      {i < post.data.tags.length - 1 ? ',\u00A0' : ''}
-                    </span>
-                  ))
-                }
-              </span>
+              <span>{post.data.tags.join(', ')}</span>
             </div>
           </div>
           <h1
