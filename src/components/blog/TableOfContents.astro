@@ -1,0 +1,65 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+
+// Filter to only show h2 and h3
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{
+  tocHeadings.length > 0 && (
+    <nav aria-label="Table of contents">
+      <div class="mb-3 font-mono text-sm tracking-wider text-neutral-500 uppercase">
+        <span class="text-fuchsia-500">#</span> index
+      </div>
+      <ul class="border-l border-neutral-800">
+        {tocHeadings.map((heading, index) => {
+          const prevHeading = tocHeadings[index - 1];
+          const isFirstH2 = heading.depth === 2 && index === 0;
+          const isH2AfterAny = heading.depth === 2 && index > 0;
+          const isH3AfterH3 = heading.depth === 3 && prevHeading?.depth === 3;
+          return (
+            <li
+              class:list={[
+                'leading-snug',
+                heading.depth === 3 ? 'pl-4' : 'pl-3',
+                isFirstH2 && 'mt-0',
+                isH2AfterAny && 'mt-3',
+                heading.depth === 3 && !isH3AfterH3 && 'mt-1',
+                isH3AfterH3 && 'mt-0.5',
+              ]}
+            >
+              <a
+                href={`#${heading.slug}`}
+                class:list={[
+                  'toc-link block font-mono text-sm text-neutral-500 transition-colors hover:text-neutral-200',
+                  heading.depth === 3 && 'text-neutral-600',
+                ]}
+              >
+                {heading.depth === 3 && <span class="mr-1 text-neutral-700">└</span>}
+                {heading.text}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  )
+}
+
+<style>
+  .toc-link:hover {
+    text-shadow:
+      -1px 0 oklch(78.9% 0.154 211.53),
+      1px 0 oklch(70.2% 0.251 321.86);
+  }
+</style>

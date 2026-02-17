@@ -137,14 +137,6 @@
   }
 }
 
-/* Blog header effects */
-.blog-header-grid {
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-  background-size: 24px 24px;
-}
-
 /* Blink animation e.g., terminal cursor */
 @keyframes blink {
   0%,
@@ -205,14 +197,41 @@
 
 /* Monochrome prose */
 .prose.prose-terminal {
-  /* Headings */
+  /* Optimal reading width (65-75 characters) */
+  max-width: 65ch;
+
+  /* Generous line height for body text */
+  p,
+  li {
+    line-height: 1.8;
+  }
+
+  /* Paragraph spacing */
+  p {
+    @apply mb-6;
+  }
+
+  /* Headings - more space above for visual grouping */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    @apply font-mono text-neutral-200;
+    @apply text-neutral-200;
+  }
+
+  h2 {
+    @apply mt-14 mb-5;
+  }
+
+  h3 {
+    @apply mt-10 mb-4;
+  }
+
+  /* Remove top margin when heading is first child */
+  > :first-child {
+    @apply mt-0;
   }
 
   /* Links */
@@ -247,27 +266,24 @@
     }
   }
 
-  /* Code blocks with terminal window chrome */
+  /* Code blocks - clear visual separation */
   pre {
-    @apply relative overflow-hidden rounded-none border border-neutral-800 bg-neutral-950 pt-10;
-
-    &::before {
-      content: 'terminal';
-      @apply absolute inset-x-0 top-0 flex h-7 items-center border-b border-neutral-800 bg-neutral-900 px-3 font-mono text-[10px] text-neutral-500 select-none;
-    }
-
-    &::after {
-      content: '';
-      @apply absolute top-2.5 right-3 size-2 rounded-full bg-neutral-600;
-      box-shadow:
-        -10px 0 0 #525252,
-        -20px 0 0 #525252;
-    }
+    @apply my-8 border border-neutral-700/40;
   }
 
-  /* Blockquotes */
+  /* Blockquotes - breathing room */
   blockquote {
-    @apply border-l-2 border-neutral-600 bg-neutral-800/20 px-4 py-1 text-neutral-400 not-italic;
+    @apply my-8 border-l-2 border-neutral-600 bg-neutral-800/20 px-4 py-2 text-neutral-400 not-italic;
+  }
+
+  /* Lists */
+  ul,
+  ol {
+    @apply my-6;
+  }
+
+  li {
+    @apply mb-3;
   }
 
   /* List markers */
