@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import FormattedDate from '@/components/blog/FormattedDate.astro';
+import TableOfContents from '@/components/blog/TableOfContents.astro';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 
@@ -13,61 +14,135 @@ export async function getStaticPaths() {
 }
 
 const post = Astro.props as CollectionEntry<'blog'>;
-const { Content } = await post.render();
+const { Content, headings } = await post.render();
 ---
 
 <Layout title={post.data.title} description={post.data.description}>
-  <article class="min-h-screen pb-20">
-    <header class="relative overflow-hidden border-b border-neutral-800 bg-neutral-900/30">
-      <!-- Grid pattern -->
-      <div class="blog-header-grid absolute inset-0"></div>
-      <div class="relative z-10 container mx-auto max-w-4xl px-6 py-8 md:pt-20 md:pb-12">
-        <a
-          href="/blog"
-          class="group mb-6 inline-flex items-center gap-2 font-mono text-sm text-neutral-500 transition-colors hover:text-accent"
-          aria-label="Back to blog"
-        >
-          <span class="transition-transform group-hover:-translate-x-1">&lt;</span>
-          cd ..
-        </a>
-        <div
-          class="mb-4 flex flex-wrap gap-4 font-mono text-xs tracking-wider text-neutral-500 uppercase"
-        >
-          <div class="flex items-center gap-2">
-            <span class="text-fuchsia-500">@</span>
-            <FormattedDate date={post.data.publishedAt} />
+  <article class="blog-article min-h-screen overflow-x-clip pb-20">
+    <!-- Header -->
+    <header class="blog-header relative mb-8 py-8 md:pt-20 md:pb-12">
+      <div class="blog-header-wrapper">
+        <div class="blog-header-content">
+          <a
+            href="/blog"
+            class="group mb-6 inline-flex items-center gap-2 font-mono text-sm text-neutral-500 transition-colors hover:text-accent"
+            aria-label="Back to blog"
+          >
+            <span class="transition-transform group-hover:-translate-x-1">&lt;</span>
+            cd ..
+          </a>
+          <div
+            class="mb-4 flex flex-wrap gap-4 font-mono text-xs tracking-wider text-neutral-500 uppercase"
+          >
+            <div class="flex items-center gap-2">
+              <span class="text-fuchsia-500">@</span>
+              <FormattedDate date={post.data.publishedAt} />
+            </div>
+            {
+              post.data.updatedAt && (
+                <div class="flex items-center gap-2">
+                  <span class="text-cyan-500">~</span>
+                  Updated <FormattedDate date={post.data.updatedAt} />
+                </div>
+              )
+            }
+            <div class="flex items-center gap-2">
+              <span class="text-neutral-300">[]</span>
+              {post.data.tags.join(', ')}
+            </div>
           </div>
+          <h1
+            class="my-6 font-sans text-3xl leading-tight font-bold tracking-tight text-neutral-100 md:text-4xl"
+          >
+            {post.data.title}
+          </h1>
           {
-            post.data.updatedAt && (
-              <div class="flex items-center gap-2">
-                <span class="text-cyan-500">~</span>
-                Updated <FormattedDate date={post.data.updatedAt} />
-              </div>
+            post.data.description && (
+              <p class="text-md font-sans leading-relaxed text-neutral-400 md:text-lg">
+                {post.data.description}
+              </p>
             )
           }
-          <div class="flex items-center gap-2">
-            <span class="text-neutral-300">[]</span>
-            {post.data.tags.join(', ')}
-          </div>
         </div>
-        <h1
-          class="my-6 font-sans text-3xl leading-tight font-bold tracking-tight text-neutral-100 md:text-5xl"
-        >
-          {post.data.title}
-        </h1>
-        {
-          post.data.description && (
-            <p class="text-md font-sans leading-relaxed text-neutral-400 md:text-lg">
-              {post.data.description}
-            </p>
-          )
-        }
+        <!-- Spacer to match TOC width on xl screens -->
+        <div class="blog-header-spacer" aria-hidden="true"></div>
       </div>
     </header>
-    <div class="container mx-auto max-w-4xl px-6 py-8 md:py-12">
-      <div class="prose-terminal prose max-w-none prose-neutral prose-invert">
+
+    <!-- Content + TOC wrapper -->
+    <div class="blog-content-wrapper">
+      <div class="blog-content prose-terminal prose max-w-none prose-neutral prose-invert">
         <Content />
       </div>
+      <aside class="blog-toc">
+        <TableOfContents headings={headings} />
+      </aside>
     </div>
   </article>
 </Layout>
+
+<style>
+  /* Header grid background - extends to viewport edges */
+  .blog-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: oklch(0.115 0 0 / 30%);
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 24px 24px;
+    z-index: -1;
+  }
+
+  /* Header bottom border - extends to viewport edges */
+  .blog-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: oklch(0.27 0 0);
+  }
+
+  /* Shared flex layout for header and content */
+  .blog-header-wrapper,
+  .blog-content-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding-inline: 1.5rem;
+  }
+
+  .blog-header-content,
+  .blog-content {
+    max-width: 65ch;
+    width: 100%;
+  }
+
+  /* Spacer and TOC - hidden by default */
+  .blog-header-spacer,
+  .blog-toc {
+    display: none;
+  }
+
+  @media (min-width: 1280px) {
+    .blog-header-spacer {
+      display: block;
+      width: 24rem;
+      flex-shrink: 0;
+    }
+
+    .blog-toc {
+      display: block;
+      position: sticky;
+      top: 2rem;
+      align-self: flex-start;
+      width: 24rem;
+      flex-shrink: 0;
+      padding-left: 6rem;
+      height: fit-content;
+    }
+  }
+</style>
