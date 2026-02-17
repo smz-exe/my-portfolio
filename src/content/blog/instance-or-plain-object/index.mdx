@@ -7,6 +7,7 @@ state: 'published'
 ---
 
 import PhotoSection from '@/components/blog/PhotoSection.astro';
+import snowGinza from './20260208-snow-ginza.png';
 
 Firestore is one of those tools that feels like cheating (in a good way).
 You can build something practical fast: collections, documents, transactions, done.
@@ -248,7 +249,7 @@ My real takeaway wasn’t “don’t use classes.” It was:
 - **Make semantics explicit, or the DB will invent semantics for you.**
 
 <PhotoSection
-  src="/src/content/blog/instance-or-plain-object/20260208-snow-ginza.png"
+  src={snowGinza}
   alt="Snow in Ginza, Tokyo"
   caption="Ginza, February 2026"
 />
