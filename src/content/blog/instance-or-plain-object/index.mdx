@@ -29,7 +29,7 @@ When this error first appeared, my first assumption was the usual one:
 
 But nope. I _was careful_ about boundaries.
 The domain was separated from persistence.
-The object I passed wasn't a domain entity – it was a **DB model class** (a DTO-like class representing the Firestore document).
+The object I passed wasn't a domain entity but a **DB model class** (a DTO-like class representing the Firestore document).
 
 It looked innocent:
 
@@ -47,13 +47,8 @@ Firestore only wants the latter.
 ## The deeper mismatch: Domain ↔ DbDto ↔ POJO
 
 The real issue wasn't "domain leakage".
-It was that my persistence layer had an extra representation:
-
-- **Domain entity**: rich class (`Company`) with invariants + methods
-
-- **DB model**: also a class (`CompanyDbDto`)
-
-- **Firestore**: wants **POJOs** (plain objects)
+It was that my persistence layer had an extra representation.
+I had a rich domain class (`Company`) with invariants and methods, a DB model class (`CompanyDbDto`), and then what Firestore actually wants: plain objects (POJOs).
 
 So the real pipeline was:
 
@@ -63,11 +58,7 @@ So the real pipeline was:
 
 Having Domain ↔ DB is normal. But adding DB class ↔ POJO as a mandatory step is… annoying.
 
-Because it introduces a new kind of bug:
-
-- you can forget the extra conversion,
-- or assume "the converter will handle it,"
-- and then `update()` rejects it anyway.
+This introduces a new kind of bug: you can forget the extra conversion, or assume "the converter will handle it," only to have `update()` reject it anyway.
 
 ## Why converters didn't help
 
@@ -91,16 +82,11 @@ At some point I started using this workaround:
 await ref.set(partialData, { merge: true });
 ```
 
-It works, but the naming bothered me. In my head:
-
-- `update()` = update existing
-- `set(..., { merge: true })` = feels like **upsert** (create if missing, otherwise merge)
-
-So yes, it's practical. But also: it's semantically slippery if you aren't explicit.
+It works, but the naming bothered me. In my head, `update()` means "update existing" while `set(..., { merge: true })` feels like an upsert that creates if missing and merges otherwise. It's practical, but semantically slippery if you aren't explicit.
 
 ## The uncomfortable options
 
-At this point I saw a few options:
+Three paths forward emerged, each with tradeoffs:
 
 ### Option A
 
@@ -109,7 +95,7 @@ Keep DB models as classes, and convert manually before writing. Something like:
 DbDto class instance → `instanceToPlain(...)` → Firestore update/set
 
 This “works,” but it’s fragile. You have to _remember_ the conversion step in every place that writes.
-So the architecture becomes “correct… if everyone is careful forever.”
+So the architecture becomes "correct only if everyone is careful forever."
 That's not a policy — it's wishful thinking.
 
 ### Option B
@@ -160,7 +146,7 @@ READ:  Firestore POJO → Zod parse → CompanyDoc → map → Company
 WRITE: Company → map → CompanyDoc → POJO → Firestore
 ```
 
-Once I separated "dependency direction" and "data flow", the design stopped feeling like spaghetti.
+Separating dependency direction from data flow made the design finally click.
 
 ## A concrete example
 
@@ -239,14 +225,15 @@ And yes: if `update` uses fetch-modify-persist, that’s a conscious tradeoff: c
 ## Closing thoughts
 
 Firestore is great — but it’s not an ORM, and it doesn’t pretend to be.
-The weird serialization errors happen when we _implicitly_ expect ORM-like behavior: passing around class instances and assuming some magic layer will serialize it consistently.
+The weird serialization errors happen when we implicitly expect ORM-like behavior.
+We pass around class instances assuming some magic layer will serialize them consistently.
 
 My real takeaway wasn’t “don’t use classes.” It was:
 
-- **Use classes where behavior lives (domain).**
-- **Use plain objects where data lives (persistence).**
-- **Validate at boundaries.**
-- **Make semantics explicit, or the DB will invent semantics for you.**
+- Use classes where behavior lives (domain).
+- Use plain objects where data lives (persistence).
+- Validate at boundaries.
+- Make semantics explicit, or the DB will invent semantics for you.
 
 <PhotoSection
   src={snowGinza}
